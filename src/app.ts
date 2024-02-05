@@ -1,10 +1,10 @@
 import express from "express";
-const app = express();
-const port = 3000;
+import "dotenv/config";
+import bodyParser from "body-parser";
 
-app.get("/", (req, res) => {
-	res.send("Hello World!");
-});
+const app = express();
+const port = parseInt(process.env.PORT!, 10) || 3000;
+app.use(bodyParser.json({ limit: "100mb" }));
 
 app.listen(port, () => {
 	return console.log(`Express is listening at http://localhost:${port}`);
