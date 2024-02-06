@@ -3,9 +3,11 @@ import { AppDataSource } from '../../data-source';
 import { HttpCode } from '../../ts-models/app-error';
 import { Users } from '../../entities/Users';
 import { AppError } from '../../errors/AppErrors';
+import { ValidationService } from '../validation/ValidationService';
 import bcrypt from 'bcrypt';
 
 export class UserService {
+  private validationService = new ValidationService();
   private userRepository = AppDataSource.getRepository(Users);
 
   hashPassword = async (password: string) => {
@@ -15,10 +17,11 @@ export class UserService {
     return hashedPassword;
   };
 
-  async signup({ username, password }: User) {
+  async signup(body: User) {
     try {
+      this.validationService.validateRequestBody(body, { isSignup: true });
       const foundUser = await this.userRepository.findOneBy({
-        username: username,
+        username: body.username,
       });
       if (foundUser) {
         throw new AppError({
@@ -27,8 +30,8 @@ export class UserService {
         });
       }
       const newUser = Object.assign(new Users(), {
-        username: username,
-        password: await this.hashPassword(password),
+        username: body.username,
+        password: await this.hashPassword(body.password),
       });
       await this.userRepository.save(newUser);
       const userResponse = newUser.toResponseObject();
