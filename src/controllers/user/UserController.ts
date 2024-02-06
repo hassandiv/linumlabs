@@ -22,7 +22,10 @@ export class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      //userService
+      const user = await this.userService.login(req.body);
+      return res
+        .status(HttpCode.OK)
+        .send({ message: 'Successful login!', user });
     } catch (error) {
       next(error);
     }

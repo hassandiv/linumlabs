@@ -7,7 +7,7 @@ const usernameRegex = /^[a-zA-Z0-9._%+-]{2,}$/;
 const passwordRegex = /^[a-zA-Z0-9._%+-]{4,}$/;
 
 export class ValidationService {
-  validateRequestBody(body: User, isSignup: { isSignup: boolean }) {
+  validateRequestBody(body: User, isSignup?: { isSignup: boolean }) {
     const errors = [];
     if (!usernameRegex.test(body.username))
       errors.push({ message: 'Username min 2 chars' });
@@ -17,7 +17,7 @@ export class ValidationService {
       });
     if (errors.length > 0)
       throw new AppError({
-        httpCode: isSignup.isSignup
+        httpCode: isSignup?.isSignup
           ? HttpCode.BAD_REQUEST
           : HttpCode.UNAUTHORIZED,
         errors: errors,
@@ -28,14 +28,24 @@ export class ValidationService {
     const invalidProperties = receivedProperties.filter(
       (prop) => !allowedProperties.includes(prop),
     );
+
     if (
       invalidProperties.length > 0 ||
       receivedProperties.length !== allowedProperties.length
     ) {
       throw new AppError({
         httpCode: HttpCode.BAD_REQUEST,
-        description: 'Invalid request body',
+        description: 'Invalid request',
       });
     }
+  }
+
+  async comparePassword(password: string, hashedPassword: string) {
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    if (!isMatch)
+      throw new AppError({
+        httpCode: HttpCode.UNAUTHORIZED,
+        description: 'Invalid password. Please try again.',
+      });
   }
 }
