@@ -1,9 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
+import { UserService } from '../../services/user/UserService';
+import { HttpCode } from '../../ts-models/app-error';
 
 export class UserController {
+  private userService: UserService;
+
+  constructor() {
+    this.userService = new UserService();
+  }
+
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
-      //userService
+      const user = await this.userService.signup(req.body);
+      return res
+        .status(HttpCode.CREATED)
+        .send({ message: 'User successfully created!', user });
     } catch (error) {
       next(error);
     }
