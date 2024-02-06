@@ -16,7 +16,7 @@ export class Users {
   followers!: number;
 
   toResponseObject() {
-    const { id, username, followers } = this;
-    return { id, username, followers };
+    const { username, followers } = this;
+    return { username, followers };
   }
 }

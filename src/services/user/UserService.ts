@@ -76,4 +76,14 @@ export class UserService {
       throw err;
     }
   }
+
+  async me(username: string) {
+    try {
+      const user = await this.userRepository.findOneBy({ username });
+      const userResponse = this.responseObject(user!);
+      return userResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../../services/user/UserService';
 import { HttpCode } from '../../ts-models/app-error';
+import CustomRequest from '../../../index';
 
 export class UserController {
   private userService: UserService;
@@ -31,9 +32,10 @@ export class UserController {
     }
   }
 
-  async me(req: Request, res: Response, next: NextFunction) {
+  async me(req: CustomRequest, res: Response, next: NextFunction) {
     try {
-      //userService
+      const user = await this.userService.me(req.jwtPayload.username);
+      return res.status(HttpCode.OK).send({ user });
     } catch (error) {
       next(error);
     }
