@@ -41,9 +41,12 @@ export class UserController {
     }
   }
 
-  async updatePassword(req: Request, res: Response, next: NextFunction) {
+  async updatePassword(req: CustomRequest, res: Response, next: NextFunction) {
     try {
-      //userService
+      await this.userService.updatePassword(req.jwtPayload.username, req.body);
+      return res
+        .status(HttpCode.OK)
+        .send({ message: 'Password successfully updated!' });
     } catch (error) {
       next(error);
     }

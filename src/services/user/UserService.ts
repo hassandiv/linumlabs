@@ -1,4 +1,4 @@
-import { User } from '../../ts-models/user';
+import { User, UpdatePassword } from '../../ts-models/user';
 import { AppDataSource } from '../../data-source';
 import { HttpCode } from '../../ts-models/app-error';
 import { Users } from '../../entities/Users';
@@ -26,7 +26,7 @@ export class UserService {
 
   async signup(body: User) {
     try {
-      this.validationService.validateRequestBody(body, { isSignup: true });
+      this.validationService.validateRequestBody(body);
       const foundUser = await this.userRepository.findOneBy({
         username: body.username,
       });
@@ -82,6 +82,26 @@ export class UserService {
       const user = await this.userRepository.findOneBy({ username });
       const userResponse = this.responseObject(user!);
       return userResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePassword(username: string, body: UpdatePassword) {
+    try {
+      this.validationService.validateUpdatePassword(body);
+      const user = await this.userRepository.findOneBy({ username });
+      if (user) {
+        await this.validationService.comparePassword(
+          body.oldPassword,
+          user.password,
+        );
+        const hashedPassword = await this.hashPassword(body.newPassword);
+        user.password = hashedPassword;
+        const updatedUser = await this.userRepository.save(user);
+        return updatedUser;
+      }
+      return;
     } catch (error) {
       throw error;
     }
