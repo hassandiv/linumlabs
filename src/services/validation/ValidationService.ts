@@ -7,7 +7,7 @@ const usernameRegex = /^[a-zA-Z0-9._%+-]{2,}$/;
 const passwordRegex = /^[a-zA-Z0-9._%+-]{4,}$/;
 
 export class ValidationService {
-  validateRequestBody(body: User) {
+  validateBodyRequest(body: User) {
     const requiredProperties = ['username', 'password'];
     const missingProperties = requiredProperties.filter(
       (prop) => !(prop in body),

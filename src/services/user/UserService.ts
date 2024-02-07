@@ -21,7 +21,7 @@ export class UserService {
 
   async signup(body: Users): Promise<UserInfo> {
     try {
-      this.validationService.validateRequestBody(body);
+      this.validationService.validateBodyRequest(body);
       const foundUser = await this.userRepository.findOneBy({
         username: body.username,
       });
@@ -45,7 +45,7 @@ export class UserService {
 
   async login(body: Users): Promise<LoginResponse> {
     try {
-      this.validationService.validateRequestBody(body);
+      this.validationService.validateBodyRequest(body);
       const user = await this.userRepository.findOneBy({
         username: body.username,
       });
