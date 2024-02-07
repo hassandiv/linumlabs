@@ -52,9 +52,11 @@ export class UserController {
     }
   }
 
-  async getUser(req: Request, res: Response, next: NextFunction) {
+  async getUserById(req: Request, res: Response, next: NextFunction) {
     try {
-      //userService
+      const userId: number = parseInt(req.params.id, 10);
+      const user = await this.userService.getUserById(userId);
+      return res.status(HttpCode.OK).send({ user });
     } catch (error) {
       next(error);
     }

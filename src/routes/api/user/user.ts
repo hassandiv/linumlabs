@@ -37,12 +37,9 @@ router.put(
 
 // @route GET /user/:id
 // @desc List username & number of followers of a user
-// @access Private
-router.get(
-  '/user/:id',
-  checkJWT,
-  (req: Request, res: Response, next: NextFunction) =>
-    userController.getUser(req, res, next),
+// @access Public
+router.get('/user/:id', (req: Request, res: Response, next: NextFunction) =>
+  userController.getUserById(req, res, next),
 );
 
 // @route POST /user/:id/follow

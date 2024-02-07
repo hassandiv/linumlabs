@@ -106,4 +106,20 @@ export class UserService {
       throw error;
     }
   }
+
+  async getUserById(id: number) {
+    try {
+      const user = await this.userRepository.findOneBy({ id });
+      if (!user) {
+        throw new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "User doesn't exist!",
+        });
+      }
+      const userResponse = this.responseObject(user);
+      return userResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
