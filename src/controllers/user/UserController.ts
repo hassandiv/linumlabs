@@ -26,7 +26,7 @@ export class UserController {
       const user = await this.userService.login(req.body);
       return res
         .status(HttpCode.OK)
-        .send({ message: 'Successful login!', user });
+        .send({ message: 'Successful login!', ...user });
     } catch (error) {
       next(error);
     }
@@ -62,9 +62,16 @@ export class UserController {
     }
   }
 
-  async followUser(req: Request, res: Response, next: NextFunction) {
+  async followUser(req: CustomRequest, res: Response, next: NextFunction) {
     try {
-      //userService
+      const userId: number = parseInt(req.params.id, 10);
+      const user = await this.userService.followUser(
+        req.jwtPayload.username,
+        userId,
+      );
+      return res
+        .status(HttpCode.OK)
+        .send({ message: `You are following ${user?.username}` });
     } catch (error) {
       next(error);
     }

@@ -12,8 +12,11 @@ export class Users {
   @Column()
   password!: string;
 
-  @Column({ default: 0 })
-  followers!: number;
+  @Column({
+    type: 'json',
+    default: () => "'[]'",
+  })
+  followers!: { username: string }[];
 
   toResponseObject() {
     const { username, followers } = this;

@@ -1,6 +1,6 @@
 export interface UserInfo {
-  username?: string;
-  followers?: number;
+  username: string;
+  followers: { username: string }[];
 }
 
 export interface User {
@@ -11,4 +11,9 @@ export interface User {
 export interface UpdatePassword {
   oldPassword: string;
   newPassword: string;
+}
+
+export interface LoginResponse {
+  user: UserInfo;
+  token: string;
 }
