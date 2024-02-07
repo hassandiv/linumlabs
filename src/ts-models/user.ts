@@ -5,7 +5,7 @@ export interface User {
 
 export interface UserInfo {
   username: string;
-  followers: { username: string }[];
+  followers: { username: string }[] | number;
 }
 
 export interface LoginResponse {

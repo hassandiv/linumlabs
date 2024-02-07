@@ -78,7 +78,10 @@ export class UserService {
   async me(username: string): Promise<UserInfo> {
     try {
       const user = await this.userRepository.findOneBy({ username });
-      const userResponse = user!.toResponseObject();
+      const userResponse = {
+        username: user?.username!,
+        followers: user?.followers.length!,
+      };
       return userResponse;
     } catch (error) {
       throw error;
@@ -112,7 +115,10 @@ export class UserService {
           description: "User doesn't exist!",
         });
       }
-      const userResponse = user.toResponseObject();
+      const userResponse = {
+        username: user.username,
+        followers: user.followers.length,
+      };
       return userResponse;
     } catch (error) {
       throw error;
