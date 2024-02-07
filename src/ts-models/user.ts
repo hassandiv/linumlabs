@@ -1,11 +1,15 @@
+export interface User {
+  username: string;
+  password: string;
+}
+
 export interface UserInfo {
   username: string;
   followers: { username: string }[];
 }
-
-export interface User {
-  username: string;
-  password: string;
+export interface LoginResponse {
+  user: UserInfo;
+  token: string;
 }
 
 export interface UpdatePassword {
@@ -13,7 +17,7 @@ export interface UpdatePassword {
   newPassword: string;
 }
 
-export interface LoginResponse {
-  user: UserInfo;
-  token: string;
+export interface Response {
+  username: string;
+  followers: number;
 }

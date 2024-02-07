@@ -77,9 +77,16 @@ export class UserController {
     }
   }
 
-  async unfollowUser(req: Request, res: Response, next: NextFunction) {
+  async unfollowUser(req: CustomRequest, res: Response, next: NextFunction) {
     try {
-      //userService
+      const userId: number = parseInt(req.params.id, 10);
+      const user = await this.userService.unfollowUser(
+        req.jwtPayload.username,
+        userId,
+      );
+      return res.status(HttpCode.OK).send({
+        message: `You have successfully unfollowed ${user?.username}`,
+      });
     } catch (error) {
       next(error);
     }

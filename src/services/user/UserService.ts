@@ -130,6 +130,7 @@ export class UserService {
   }
 
   async followUser(username: string, id: number): Promise<UserInfo> {
+    console.log('username id', username, id);
     try {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) {
@@ -149,6 +150,36 @@ export class UserService {
         });
       }
       user.followers = [...(user.followers || []), { username: username }];
+      await this.userRepository.save(user);
+      const userResponse = this.responseObject(user);
+      return userResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async unfollowUser(username: string, id: number): Promise<UserInfo> {
+    try {
+      const user = await this.userRepository.findOneBy({ id });
+      if (!user) {
+        throw new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: 'User not found.',
+        });
+      }
+      const isAlreadyFollowing = user.followers?.some(
+        (follower) =>
+          follower?.username.toLowerCase() === username.toLowerCase(),
+      );
+      if (!isAlreadyFollowing) {
+        throw new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: 'You are not following this user.',
+        });
+      }
+      user.followers = user.followers?.filter(
+        (follower) => follower.username !== username,
+      );
       await this.userRepository.save(user);
       const userResponse = this.responseObject(user);
       return userResponse;
