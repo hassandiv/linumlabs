@@ -94,7 +94,10 @@ export class UserController {
 
   async listMostFollowed(req: Request, res: Response, next: NextFunction) {
     try {
-      //userService
+      const mostFollowed = await this.userService.listMostFollowed();
+      return res.status(HttpCode.OK).send({
+        mostFollowed,
+      });
     } catch (error) {
       next(error);
     }

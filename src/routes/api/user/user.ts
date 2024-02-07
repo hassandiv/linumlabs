@@ -64,10 +64,9 @@ router.delete(
 
 // @route GET /most-followed
 // @desc List users in a most liked to least liked
-// @access Private
+// @access Public
 router.get(
   '/most-followed',
-  checkJWT,
   (req: Request, res: Response, next: NextFunction) =>
     userController.listMostFollowed(req, res, next),
 );

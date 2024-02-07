@@ -1,9 +1,4 @@
-import {
-  LoginResponse,
-  User,
-  UserInfo,
-  UpdatePassword,
-} from '../../ts-models/user';
+import { LoginResponse, UserInfo, UpdatePassword } from '../../ts-models/user';
 import { AppDataSource } from '../../data-source';
 import { HttpCode } from '../../ts-models/app-error';
 import { Users } from '../../entities/Users';
@@ -24,12 +19,7 @@ export class UserService {
     return hashedPassword;
   };
 
-  responseObject = (user: Users) => {
-    const response = user.toResponseObject();
-    return response;
-  };
-
-  async signup(body: User): Promise<UserInfo> {
+  async signup(body: Users): Promise<UserInfo> {
     try {
       this.validationService.validateRequestBody(body);
       const foundUser = await this.userRepository.findOneBy({
@@ -46,14 +36,14 @@ export class UserService {
         password: await this.hashPassword(body.password),
       });
       await this.userRepository.save(newUser);
-      const userResponse = this.responseObject(newUser);
+      const userResponse = newUser.toResponseObject();
       return userResponse;
     } catch (error) {
       throw error;
     }
   }
 
-  async login(body: User): Promise<LoginResponse> {
+  async login(body: Users): Promise<LoginResponse> {
     try {
       this.validationService.validateRequestBody(body);
       const user = await this.userRepository.findOneBy({
@@ -74,7 +64,7 @@ export class UserService {
         id: user.id,
         username: user.username,
       });
-      const userResponse = this.responseObject(user);
+      const userResponse = user.toResponseObject();
       const loginResponse: LoginResponse = {
         token,
         user: userResponse,
@@ -88,7 +78,7 @@ export class UserService {
   async me(username: string): Promise<UserInfo> {
     try {
       const user = await this.userRepository.findOneBy({ username });
-      const userResponse = this.responseObject(user!);
+      const userResponse = user!.toResponseObject();
       return userResponse;
     } catch (error) {
       throw error;
@@ -122,7 +112,7 @@ export class UserService {
           description: "User doesn't exist!",
         });
       }
-      const userResponse = this.responseObject(user);
+      const userResponse = user.toResponseObject();
       return userResponse;
     } catch (error) {
       throw error;
@@ -130,7 +120,6 @@ export class UserService {
   }
 
   async followUser(username: string, id: number): Promise<UserInfo> {
-    console.log('username id', username, id);
     try {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) {
@@ -151,7 +140,7 @@ export class UserService {
       }
       user.followers = [...(user.followers || []), { username: username }];
       await this.userRepository.save(user);
-      const userResponse = this.responseObject(user);
+      const userResponse = user.toResponseObject();
       return userResponse;
     } catch (error) {
       throw error;
@@ -181,10 +170,20 @@ export class UserService {
         (follower) => follower.username !== username,
       );
       await this.userRepository.save(user);
-      const userResponse = this.responseObject(user);
+      const userResponse = user.toResponseObject();
       return userResponse;
     } catch (error) {
       throw error;
     }
+  }
+
+  async listMostFollowed(): Promise<UserInfo[]> {
+    const users = await this.userRepository.find();
+    users.sort(
+      (userA: Users, userB: Users) =>
+        userB?.followers.length - userA?.followers.length,
+    );
+    const sortedUsers = users.map((user: Users) => user.toResponseObject());
+    return sortedUsers;
   }
 }
