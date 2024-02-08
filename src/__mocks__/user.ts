@@ -1,6 +1,6 @@
 export const mockUser = {
-  id: 1,
-  username: 'mark',
-  password: 'somepassword',
-  followers: [{ username: 'sara' }, { username: 'monica' }],
+  id: 99,
+  username: 'james',
+  password: 'somepassword0',
+  followers: [{ username: 'mark' }, { username: 'monica' }],
 };

@@ -5,7 +5,7 @@ import { mockUser } from '../../../../__mocks__/user';
 
 describe('POST /login', () => {
   describe('given username and password for login', () => {
-    test('should respond with a status code 401 when a user dont exist', async () => {
+    test('should respond with a status code 401 when authentication failed user dont exist', async () => {
       const response = await supertest(app).post('/login').send({
         username: mockUser.username,
         password: mockUser.password,
@@ -25,7 +25,7 @@ describe('POST /login', () => {
     });
   });
 
-  describe('when the username and password are missing', () => {
+  describe('when the username or password or both are missing', () => {
     test('should respond with a status code 400', async () => {
       const bodyData = [
         { username: mockUser.username },

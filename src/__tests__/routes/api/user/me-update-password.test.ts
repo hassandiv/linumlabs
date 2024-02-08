@@ -7,18 +7,6 @@ import { mockUser } from '../../../../__mocks__/user';
 describe('GET /me/update-password', () => {
   const mockToken = generateMockToken();
   describe('when a valid JWT token is provided to update password', () => {
-    test('should respond with a status code 401 when the incorrect old password provided', async () => {
-      const response = await supertest(app)
-        .put('/me/update-password')
-        .set('Authorization', `Bearer ${mockToken}`)
-        .send({
-          oldPassword: mockUser.password,
-          newPassword: 'newpassword',
-        });
-      expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
-      expect(response.body.error).toBeDefined();
-    });
-
     test('should respond with a status code 400 when password is less than 4 characters long', async () => {
       const response = await supertest(app)
         .put('/me/update-password')

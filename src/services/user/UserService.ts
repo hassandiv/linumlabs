@@ -93,6 +93,7 @@ export class UserService {
     try {
       this.validationService.validateUpdatePassword(body);
       const user = await this.userRepository.findOneBy({ username });
+      console.log('update password user', user);
       if (user) {
         await this.validationService.comparePassword(
           body.oldPassword,
