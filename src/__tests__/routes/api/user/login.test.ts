@@ -25,8 +25,8 @@ describe('POST /login', () => {
     });
   });
 
-  describe('when the username or password or both are missing', () => {
-    test('should respond with a status code 400', async () => {
+  describe('when the username, password, or both are missing in the request body', () => {
+    test('should respond with a 400 status code and provide an error message', async () => {
       const bodyData = [
         { username: mockUser.username },
         { password: mockUser.password },

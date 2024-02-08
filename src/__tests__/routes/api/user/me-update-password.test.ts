@@ -4,10 +4,10 @@ import { HttpCode } from '../../../../ts-models/app-error';
 import { generateMockToken } from '../../../../__mocks__/jwt';
 import { mockUser } from '../../../../__mocks__/user';
 
-describe('GET /me/update-password', () => {
+describe('PUT /me/update-password', () => {
   const mockToken = generateMockToken();
   describe('when a valid JWT token is provided to update password', () => {
-    test('should respond with a status code 400 when password is less than 4 characters long', async () => {
+    test('should respond with a 400 status code when the new password is less than 4 characters long', async () => {
       const response = await supertest(app)
         .put('/me/update-password')
         .set('Authorization', `Bearer ${mockToken}`)
@@ -19,7 +19,7 @@ describe('GET /me/update-password', () => {
       expect(response.body.error).toBeDefined();
     });
 
-    test('should respond with a status code 400 when the old password or new password or both are missing', async () => {
+    test('should respond with a status code 400 when the old password, new password, or both are missing in the request body', async () => {
       const bodyData = [
         { oldPassword: mockUser.password },
         { newPassword: mockUser.password },
