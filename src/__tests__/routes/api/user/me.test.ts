@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import app from '../../../../app';
 import { HttpCode } from '../../../../ts-models/app-error';
-import { generateMockToken } from '../../../../__mocks__/user';
+import { generateMockToken } from '../../../../__mocks__/jwt';
 
 describe('GET /me', () => {
   describe('when a valid JWT token is provided', () => {
@@ -19,6 +19,7 @@ describe('GET /me', () => {
     test('should respond with a status code 401', async () => {
       const response = await supertest(app).get('/me');
       expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.body.error).toBeDefined();
     });
   });
 
@@ -29,6 +30,7 @@ describe('GET /me', () => {
         .get('/me')
         .set('Authorization', `Bearer ${invalidToken}`);
       expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.body.error).toBeDefined();
     });
   });
 
@@ -39,6 +41,7 @@ describe('GET /me', () => {
         .get('/me')
         .set('Authorization', `Bearer ${expiredToken}`);
       expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.body.error).toBeDefined();
     });
   });
 });

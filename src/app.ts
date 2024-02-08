@@ -6,31 +6,37 @@ import { AppDataSource } from './data-source';
 import { errorHandler } from './middlewares/errorHandler';
 import 'dotenv/config';
 
-const port = parseInt(process.env.PORT!, 10) || 3000;
+const serverPort = parseInt(process.env.PORT!, 10) || 3000;
 const app = express();
 let server: http.Server;
 
-export const startServer = async () => {
+export async function startServer(port?: number): Promise<void> {
   try {
     await AppDataSource.initialize();
     app.use(bodyParser.json({ limit: '100mb' }));
     app.use('/', userRouter);
     app.use(errorHandler);
-    server = app.listen(port, () => {
+
+    const selectedPort = port || serverPort;
+
+    server = app.listen(selectedPort, () => {
       console.log(
-        `Express server has started on port ${port}. Open http://localhost:${port}/users to see results`,
+        `Express server has started on port ${serverPort}. Open http://localhost:${serverPort}/users to see results`,
       );
     });
   } catch (error) {
     console.log(error);
   }
-};
+}
 
-export const stopServer = async () => {
-  if (server) {
-    server.close();
-  }
-};
+export async function stopServer(): Promise<void> {
+  return new Promise((resolve) => {
+    server.close(() => {
+      console.log('Server stopped');
+      resolve();
+    });
+  });
+}
 
 if (require.main === module) {
   startServer();

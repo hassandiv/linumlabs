@@ -51,8 +51,9 @@ export class UserService {
       });
       if (!user) {
         throw new AppError({
-          httpCode: HttpCode.NOT_FOUND,
-          description: "User doesn't exist!",
+          httpCode: HttpCode.UNAUTHORIZED,
+          description:
+            'Authentication failed: The specified user does not exist. Please check your credentials and try again.',
         });
       }
 

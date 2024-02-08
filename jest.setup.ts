@@ -1,7 +1,8 @@
 import { startServer, stopServer } from './src/app';
 
 beforeAll(async () => {
-  await startServer();
+  const port = parseInt(process.env.TEST_PORT!) || 4000;
+  await startServer(port);
 });
 
 afterAll(async () => {
