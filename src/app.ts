@@ -21,7 +21,7 @@ export async function startServer(port?: number): Promise<void> {
 
     server = app.listen(selectedPort, () => {
       console.log(
-        `Express server has started on port ${serverPort}. Open http://localhost:${serverPort}/users to see results`,
+        `Express server has started on port ${serverPort}. Open http://localhost:${serverPort}/ to see results`,
       );
     });
   } catch (error) {
@@ -32,7 +32,6 @@ export async function startServer(port?: number): Promise<void> {
 export async function stopServer(): Promise<void> {
   return new Promise((resolve) => {
     server.close(() => {
-      console.log('Server stopped');
       resolve();
     });
   });

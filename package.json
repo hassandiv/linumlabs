@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "dev": "nodemon src/app.ts",
-    "test": "jest --runInBand --detectOpenHandles --setupFilesAfterEnv ./jest.setup.js",
+    "test": "jest --runInBand --detectOpenHandles --setupFilesAfterEnv ./jest.setup.ts",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs"
   },

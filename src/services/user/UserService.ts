@@ -56,7 +56,6 @@ export class UserService {
             'Authentication failed: The specified user does not exist. Please check your credentials and try again.',
         });
       }
-
       await this.validationService.comparePassword(
         body.password,
         user.password,
