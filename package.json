@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "dev": "nodemon src/app.ts",
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test": "jest --runInBand --detectOpenHandles",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs"
   },
